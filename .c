@@ -1,24 +1,25 @@
-#include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <locale.h>
+//////PILHA//////
+using namespace std;
 
-
-struct elemento{
+struct valor{
     int num;
-    struct elemento *prox;
-};
+    struct valor *prox;
+}valor;
 
-typedef struct elemento* Pilha;
-typedef struct elemento Elem;
+typedef struct valor* Pilha;
+typedef struct valor Elem;
 
 Pilha* cria_Pilha(){
-    Pilha* pi = (Pilha*) malloc(sizeof(Pilha));
+    Pilha* pi = new Pilha;
     if(pi != NULL)
         *pi = NULL;
     return pi;
 }
 
-void libera_Pilha(Pilha* pi){
+void limpa_Pilha(Pilha* pi){
     if(pi != NULL){
         Elem* no;
         while((*pi) != NULL){
@@ -30,17 +31,18 @@ void libera_Pilha(Pilha* pi){
     }
 }
 
-int insere_Pilha(Pilha* pi, int valor){
+int inserir_Pilha(Pilha* pi, int valor){
     if(pi == NULL)
         return 0;
     Elem* no;
-    no = (Elem*) malloc(sizeof(Elem));
+    no = new Elem;
     if(no == NULL)
         return 0;
     no->num = valor;
     no->prox = (*pi);
     *pi = no;
     return 1;
+    cout << "\n";
 }
 
 int remove_Pilha(Pilha* pi){
@@ -51,6 +53,7 @@ int remove_Pilha(Pilha* pi){
     Elem *no = *pi;
     *pi = no->prox;
     free(no);
+    cout << "\n";
     return 1;
 }
 
@@ -67,54 +70,52 @@ int tamanho_Pilha(Pilha* pi){
 }
 
 void imprime_Pilha(Pilha* pi){
-    if(pi == NULL)
-        return 0;
+    if(pi == NULL){
+        cout << "Vazio Porra";}
     Elem* no = *pi;
     while(no != NULL){
-        printf("%d\n",no->num);
+        cout << no->num << endl;
         no = no->prox;
     }
 }
 
 int main(){
-    int valor,insere,tamanho,remover,opt;
+    setlocale(LC_ALL,"Portuguese");
+    int valor,insere,tamanho,remover,op;
 
     Pilha *pi=cria_Pilha();
     do{
-    printf("0. Sair:\n");
-    printf("1. Listar pilha:\n");
-    printf("2. Inserir na pilha:\n");
-    printf("3. Remover da pilha:\n");
-    printf("4. Tamanho da pilha:\n");
-    printf("opcao:");
-    scanf("%i",&opt);
-    switch(opt){
-        case(0):
-        break;
+    cout << "1 - Inserir na pilha\n2 - Listar\n3 - Remover\n4 - Sair\n";
+    cout <<"Opcao:";
+    cin >> op;
+    switch(op){
+
         case(1):
-        printf("pilha:\n");
-        imprime_Pilha(pi);
-        break;
+            cout << "Insira o valor:\n";
+            cin >> valor;
+            insere= inserir_Pilha(pi,valor);
+            break;
+
         case(2):
-            printf("entre com um numero:\n");
-            scanf("%i",&valor);
-            insere= insere_Pilha(pi,valor);
-            printf("inserido com sucesso!\n");
-        break;;
+        cout << "Pilha:\n";
+        imprime_Pilha(pi);
+
+        break;
+
         case(3):
             remover = remove_Pilha(pi);
             if (remover == 0){
-                printf("tomar no cu");}
-            printf("Removido com sucesso!\n");
+                cout << "tomar no cu";}
         break;
+
         case(4):
-            tamanho= tamanho_Pilha(pi);
-            printf("Quantidade de elementos da pilha:%d\n",tamanho);
+            cout << "Obrigado por usar essa merda.";
         break;
+
         default:
-            printf("opicao invalida!\n");
+            cout << "Opção inválida seu animal!!!!\n";
         break;
     }
-    }while(opt!=0);
+    }while(op!=4);
     return 0;
 }
